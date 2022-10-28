@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Xml.Serialization;
 using CookComputing.XmlRpc;
 using SubtitleDownloader.Core;
@@ -38,6 +39,8 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
 
         public OpenSubtitlesDownloader(string configurationFile)
         {
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
+
             if (File.Exists(configurationFile))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(OpenSubtitlesConfiguration));
