@@ -3,15 +3,100 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Xml.Serialization;
-using CookComputing.XmlRpc;
 using SubtitleDownloader.Core;
 using SubtitleDownloader.Util;
 
 namespace SubtitleDownloader.Implementations.OpenSubtitles
 {
+    #pragma warning disable 649
+    [DataContract]
+    internal class FeatureDetails
+    {
+        [DataMember]
+        internal string movie_name;
+        [DataMember]
+        internal int year;
+    }
+    [DataContract]
+    internal class OneFile
+    {
+        [DataMember]
+        internal string file_id;
+
+        [DataMember]
+        internal string file_name;
+    }
+
+    [DataContract]
+    internal class Attributes
+    {
+        [DataMember]
+        internal string subtitle_id;
+        [DataMember]
+        internal string language;
+        [DataMember]
+        internal string url;
+        [DataMember]
+        internal FeatureDetails feature_details;
+        [DataMember]
+        internal OneFile[] files;
+    }
+
+    [DataContract]
+    internal class OneSub
+    {
+        [DataMember]
+        internal int id;
+        [DataMember]
+        internal string type;
+        [DataMember]
+        internal Attributes attributes;
+    }
+    [DataContract]
+    internal class SubtitleSearchResponse
+    {
+        [DataMember]
+        internal int page;
+        [DataMember]
+        internal int per_page;
+        [DataMember]
+        internal int total_count;
+        [DataMember]
+        internal int total_pages;
+        [DataMember(Name = "data")]
+        internal OneSub[] subtitles;
+    }
+
+    [DataContract]
+    internal class LoginResponse
+    {
+        [DataMember]
+        internal string token;
+    }
+
+    [DataContract]
+    internal class DownloadResponse
+    {
+        [DataMember]
+        internal string link;
+        [DataMember]
+        internal string file_name;
+        [DataMember]
+        internal int requests;
+        [DataMember]
+        internal int remaining;
+        [DataMember]
+        internal string message;
+    }
+    #pragma warning restore 649
+
     /// <summary>
-    /// Implementation uses OpenSubtitles XML-RPC API
+    /// Implementation uses OpenSubtitles REST API
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/e3750fd63a100-getting-started
     /// 
     /// Supports:
     /// - SearchSubtitles(SearchQuery query)
@@ -20,13 +105,9 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
     /// </summary>
     public class OpenSubtitlesDownloader : ISubtitleDownloader
     {
-        private const string ApiUrl = "https://api.opensubtitles.org/xml-rpc";
+        private const string ApiUrl = "https://api.opensubtitles.com/api/v1/";
 
-        private readonly string UserAgent = Configuration.OpenSubtitlesUserAgent;
-
-        private IOpenSubtitlesProxy openSubtitlesProxy;
-
-        private string token;
+        private string token = null;
 
         private int searchTimeout;
 
@@ -39,8 +120,6 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
 
         public OpenSubtitlesDownloader(string configurationFile)
         {
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
-
             if (File.Exists(configurationFile))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(OpenSubtitlesConfiguration));
@@ -61,64 +140,89 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
         {
             CreateConnectionAndLogin();
 
-            if (searchTimeout > 0)
-                openSubtitlesProxy.Timeout = searchTimeout * 1000;
+            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            queryString.Add("languages", GetLanguageCodes(query));
+            queryString.Add("query", query.Query.ToLowerInvariant());
+            if (query.Year.HasValue)
+              queryString.Add("year", query.Year.Value.ToString());
 
-            subInfo[] searchQuery = new[] { new subInfo(GetLanguageCodes(query), "", null, null, query.Query) };
+            var response = GetWebData(ApiUrl + "subtitles?" + queryString.ToString());
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
+            SubtitleSearchResponse sr = (SubtitleSearchResponse)ser.ReadObject(response);
 
-            return PerformSearch(searchQuery, query.Year);
+            return CreateSubtitleResults(sr, query.Year);
         }
 
         public List<Subtitle> SearchSubtitles(EpisodeSearchQuery query)
         {
             CreateConnectionAndLogin();
 
-            if (searchTimeout > 0)
-                openSubtitlesProxy.Timeout = searchTimeout * 1000;
+            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            queryString.Add("episode_number", query.Episode.ToString());
+            queryString.Add("languages", GetLanguageCodes(query));
+            queryString.Add("query", query.SerieTitle.ToLowerInvariant());
+            queryString.Add("season_number", query.Season.ToString());
 
-            string episode = "e" + String.Format("{0:00}", query.Episode);
-            string season = "s" + String.Format("{0:00}", query.Season);
+            var response = GetWebData(ApiUrl + "subtitles?" + queryString.ToString());
 
-            // e.g. "heroes s04e04"
-            string q = query.SerieTitle + " " + season + episode;
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
+            SubtitleSearchResponse sr = (SubtitleSearchResponse)ser.ReadObject(response);
 
-            subInfo[] searchQuery = new[] { new subInfo(GetLanguageCodes(query), "", null, null, q) };
-
-            return PerformSearch(searchQuery, null);
+            return CreateSubtitleResults(sr, null);
         }
 
         public List<Subtitle> SearchSubtitles(ImdbSearchQuery query)
         {
             CreateConnectionAndLogin();
 
-            if (searchTimeout > 0)
-                openSubtitlesProxy.Timeout = searchTimeout * 1000;
+            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            queryString.Add("imdb_id", query.ImdbId.ToLowerInvariant());
+            queryString.Add("languages", GetLanguageCodes(query));
 
-            subInfo[] searchQuery = new[] { new subInfo(GetLanguageCodes(query), "", null, query.ImdbIdNullable, "") };
+            var response = GetWebData(ApiUrl + "subtitles?" + queryString.ToString());
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
+            SubtitleSearchResponse sr = (SubtitleSearchResponse)ser.ReadObject(response);
 
-            return PerformSearch(searchQuery, null);
+            return CreateSubtitleResults(sr, null);
         }
 
         public List<FileInfo> SaveSubtitle(Subtitle subtitle)
         {
             CreateConnectionAndLogin();
 
-            subdata files = openSubtitlesProxy.DownloadSubtitles(token, new[] { subtitle.Id } );
-
-            if (files != null && files.data != null && files.data.Count() > 0)
+            OneFile oneFile = new OneFile()
             {
-                string originalFileName = subtitle.FileName;
+                file_id = subtitle.Id,
+                file_name = subtitle.FileName
+            };
+            string url;
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(OneFile));
+            using (Stream stream = new MemoryStream())
+            {
+                ser.WriteObject(stream, oneFile);
+                var response = GetWebData(ApiUrl + "download", stream);
+                DataContractJsonSerializer ser2 = new DataContractJsonSerializer(typeof(DownloadResponse));
+                DownloadResponse downloadResponse = (DownloadResponse)ser2.ReadObject(response);
+                url = downloadResponse.link;
+            }
 
-                string tempFile = Path.GetTempPath() + originalFileName;
-
+            if (!String.IsNullOrEmpty(url))
+            {
+                string tempFile = Path.GetTempPath() + subtitle.FileName;
                 if (File.Exists(tempFile))
                 {
                     File.Delete(tempFile);
                 }
 
-                FileUtils.WriteNewFile(tempFile,
-                                       Decoder.DecodeAndDecompress(files.data[0].data));
-                
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                if (SearchTimeout > 0)
+                    request.Timeout = SearchTimeout * 1000;
+                var responseStream=request.GetResponse().GetResponseStream();
+                using (var fStream = new FileStream(tempFile, FileMode.CreateNew))
+                {
+                    responseStream.CopyTo(fStream);
+                }
+
                 return new List<FileInfo> { new FileInfo(tempFile) };
             }
             throw new Exception("Subtitle not found with ID '" + subtitle.Id + "'");
@@ -130,183 +234,90 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             set { searchTimeout = value; }
         }
 
-        private List<Subtitle> PerformSearch(subInfo[] searchQuery, int? queryYear)
+        private Stream GetWebData(string url, Stream postData = null)
         {
-            subrt subResults;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.ContentType = "application/json";
+            request.UserAgent = Configuration.OpenSubtitlesUserAgent;
+            request.Headers.Add("Api-Key", Configuration.OpenSubtitlesApiKey);
+            request.Accept = "*/*";
+            if (token != null)
+                request.Headers.Add("Authorization", "Bearer " + token);
+            if (SearchTimeout > 0)
+                request.Timeout = SearchTimeout * 1000;
 
-            try
+            if (postData != null)
             {
-                subResults = openSubtitlesProxy.SearchSubtitles(token, searchQuery);
-            }
-            catch (XmlRpcTypeMismatchException)
-            {
-                // For some reason if no results are found, data is type boolean
-                return new List<Subtitle>(0);
-            }
+                request.Method = "POST";
+                request.ContentLength = postData.Length;
 
-            return CreateSubtitleResults(subResults, queryYear);
+                var stream = request.GetRequestStream();
+                postData.Position = 0;
+                postData.CopyTo(stream);
+            }
+            return request.GetResponse().GetResponseStream();
         }
 
-        private List<Subtitle> CreateSubtitleResults(subrt subResults, int? queryYear)
+        private List<Subtitle> CreateSubtitleResults(SubtitleSearchResponse subResults, int? queryYear)
         {
             List<Subtitle> searchResults = new List<Subtitle>();
 
-            if (subResults != null && subResults.data != null && subResults.data.Count() > 0)
+            if (subResults != null && subResults.subtitles != null && subResults.subtitles.Length > 0)
             {
-                foreach (subRes result in subResults.data)
-                {
-                    Subtitle subtitle = new Subtitle(result.IDSubtitleFile, result.MovieNameEng, 
-                                                     result.SubFileName, result.SubLanguageID);
-
-                    if (queryYear != null)
+                foreach (OneSub result in subResults.subtitles)
+                    if (result.attributes.files.Length == 1 && result.attributes.files[0].file_name != null)
                     {
-                        // Check if the query year matches
-                        if (result.MovieYear != null)
-                        {
-                            int yearAsInt = Convert.ToInt16(result.MovieYear);
+                        Subtitle subtitle = new Subtitle(result.attributes.files[0].file_id, result.attributes.feature_details.movie_name,
+                                                         result.attributes.files[0].file_name, Languages.Convert2CharTo3Char(result.attributes.language));
 
-                            if (queryYear.Equals(yearAsInt))
+                        if (queryYear != null)
+                        {
+                            // Check if the query year matches
+                            if (result.attributes.feature_details.year != 0)
                             {
+                                if (queryYear.Equals(result.attributes.feature_details.year))
+                                {
+                                    searchResults.Add(subtitle);
+                                }
+                            }
+                            else
+                            {
+                                // No year found in results set
                                 searchResults.Add(subtitle);
                             }
                         }
                         else
                         {
-                            // No year found in results set
                             searchResults.Add(subtitle);
                         }
                     }
-                    else
-                    {
-                        searchResults.Add(subtitle);
-                    }
-                }
             }
             return searchResults;
         }
 
         private void CreateConnectionAndLogin()
         {
-            openSubtitlesProxy = XmlRpcProxyGen.Create<IOpenSubtitlesProxy>();
-            openSubtitlesProxy.Url = ApiUrl;
-            openSubtitlesProxy.KeepAlive = false;
-
-            XmlRpcStruct login = openSubtitlesProxy.LogIn(configuration.Username, configuration.Password, configuration.Language, UserAgent);
-            token = login["token"].ToString();
+            if (token == null)
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(OpenSubtitlesConfiguration));
+                using (Stream stream = new MemoryStream())
+                {
+                    ser.WriteObject(stream, configuration);
+                    var response = GetWebData(ApiUrl + "login", stream);
+                    DataContractJsonSerializer ser2 = new DataContractJsonSerializer(typeof(LoginResponse));
+                    LoginResponse loginResult = (LoginResponse)ser2.ReadObject(response);
+                    token = loginResult.token;
+                }
+            }
         }
 
         private string GetLanguageCodes(SubtitleSearchQuery query)
         {
-            string languageCodes = "";
-
-            foreach (string languageCode in query.LanguageCodes)
-            {
-                languageCodes += languageCode;
-                languageCodes += ",";
-            }
-
-            if (query.LanguageCodes.Length > 0)
-                languageCodes = languageCodes.Remove(languageCodes.Length - 1, 1);
-
-            return languageCodes;
+            string[] twoCharLanguages = new string[query.LanguageCodes.Length];
+            for (int i = 0; i < query.LanguageCodes.Length; i++)
+                twoCharLanguages[i] = Languages.Convert3CharTo2Char(query.LanguageCodes[i]);
+            return string.Join(",", twoCharLanguages);
         }
     }
 
-    //
-    // Classes for XML-RPC communication
-    //
-
-    public interface IOpenSubtitlesProxy : IXmlRpcProxy
-    {
-        [XmlRpcMethod("ServerInfo")]
-        XmlRpcStruct ServerInfo();
-
-        [XmlRpcMethod("LogIn")]
-        XmlRpcStruct LogIn(string username, string password, string language, string useragent);
-
-        [XmlRpcMethod("LogOut")]
-        XmlRpcStruct LogOut(string token);
-
-        [XmlRpcMethod("SearchSubtitles")]
-        subrt SearchSubtitles(string token, subInfo[] subs);
-
-        [XmlRpcMethod("DownloadSubtitles")]
-        subdata DownloadSubtitles(string token, string[] subs);
-    }
-
-    public class subtitle
-    {
-        public string idsubtitlefile { get; set; }
-        public string data { get; set; }
-    }
-
-    public class subrt
-    {
-        public subRes[] data { get; set; }
-        public double seconds { get; set; }
-    }
-
-    public class subInfo
-    {
-        public subInfo(string sublanguageid, string moviehash, int? moviebytesize, int? imdbid, string query)
-        {
-            this.sublanguageid = sublanguageid;
-            this.moviehash = moviehash;
-            this.moviebytesize = moviebytesize;
-            this.imdbid = imdbid;
-            this.query = query;
-        }
-
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string sublanguageid { get; set; }
-        public string moviehash { get; set; }
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public int? moviebytesize { get; set; }
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public int? imdbid { get; set; }
-        public string query { get; set; }
-    }
-
-    public class subdata
-    {
-        public string status { get; set; }
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public subtitle[] data;
-        public double seconds { get; set; }
-    }
-
-    public class subRes
-    {
-        public string IDSubtitle { get; set; }
-        public string IDSubtitleFile { get; set; }
-        public string SubAuthorComment { get; set; }
-        public string LanguageName { get; set; }
-        public string UserID { get; set; }
-        public string MovieNameEng { get; set; }
-        public string MovieByteSize { get; set; }
-        public string IDMovie { get; set; }
-        public string MovieYear { get; set; }
-        public string SubHash { get; set; }
-        public string MovieHash { get; set; }
-        public string SubFormat { get; set; }
-        public string SubBad { get; set; }
-        public string SubDownloadsCnt { get; set; }
-        public string SubLanguageID { get; set; }
-        public string IDMovieImdb { get; set; }
-        public string MovieTimeMS { get; set; }
-        public string SubActualCD { get; set; }
-        public string MovieReleaseName { get; set; }
-        public string SubRating { get; set; }
-        public string SubDownloadLink { get; set; }
-        public string ZipDownloadLink { get; set; }
-        public string IDSubMovieFile { get; set; }
-        public string ISO639 { get; set; }
-        public string SubSumCD { get; set; }
-        public string SubSize { get; set; }
-        public string UserNickName { get; set; }
-        public string SubAddDate { get; set; }
-        public string MovieName { get; set; }
-        public string MovieImdbRating { get; set; }
-        public string SubFileName { get; set; }
-    }
 }

@@ -9,102 +9,102 @@ namespace SubtitleDownloader.Core
     /// </summary>
     public static class Languages
     {
-        private static readonly SubLang DefaultLanguage = new SubLang("eng", "English");
+        private static readonly SubLang DefaultLanguage = new SubLang("en", "eng", "English");
 
-        private static readonly SubLang[] aliases = 
+        private static readonly SubLang[] aliases =
         {
-            new SubLang("nld", "Dutch")
+            new SubLang("nl", "nld", "Dutch")
         };
 
-        private static readonly SubLang[] languages = 
-        { 
-            new SubLang("bos", "Bosnian"), 
+        private static readonly SubLang[] languages =
+        {
+            new SubLang("bs", "bos", "Bosnian"),
 
-            new SubLang("slv", "Slovenian"), 
-            
-            new SubLang("hrv", "Croatian"),
- 
-            new SubLang("srp", "Serbian"), 
-            
-            new SubLang("eng", "English"), 
-            
-            new SubLang("spa", "Spanish"), 
-            
-            new SubLang("fre", "French"), 
-            
-            new SubLang("gre", "Greek"), 
-            
-            new SubLang("ger", "German"), 
-            
-            new SubLang("rus", "Russian"), 
-            
-            new SubLang("chi", "Chinese"), 
-            
-            new SubLang("por", "Portuguese"), 
-            
-            new SubLang("dut", "Dutch"), 
-            
-            new SubLang("ita", "Italian"), 
-            
-            new SubLang("rum", "Romanian"), 
-            
-            new SubLang("cze", "Czech"), 
-            
-            new SubLang("ara", "Arabic"), 
-            
-            new SubLang("pol", "Polish"), 
-            
-            new SubLang("tur", "Turkish"), 
-            
-            new SubLang("swe", "Swedish"), 
-            
-            new SubLang("fin", "Finnish"), 
+            new SubLang("sl", "slv", "Slovenian"),
 
-            new SubLang("hun", "Hungarian"), 
-            
-            new SubLang("dan", "Danish"), 
-            
-            new SubLang("heb", "Hebrew"), 
-            
-            new SubLang("est", "Estonian"), 
-            
-            new SubLang("slo", "Slovak"), 
-           
-            new SubLang("ind", "Indonesian"), 
-            
-            new SubLang("per", "Persian"), 
-            
-            new SubLang("bul", "Bulgarian"), 
-            
-            new SubLang("jpn", "Japanese"), 
-            
-            new SubLang("alb", "Albanian"), 
-            
-            new SubLang("bel", "Belarusian"), 
-            
-            new SubLang("hin", "Hindi"), 
-            
-            new SubLang("gle", "Irish"), 
-            
-            new SubLang("ice", "Icelandic"), 
-            
-            new SubLang("cat", "Catalan"), 
-            
-            new SubLang("kor", "Korean"), 
-            
-            new SubLang("lav", "Latvian"), 
-            
-            new SubLang("lit", "Lithuanian"), 
-            
-            new SubLang("mac", "Macedonian"), 
-            
-            new SubLang("nor", "Norwegian"), 
-            
-            new SubLang("tha", "Thai"), 
-            
-            new SubLang("ukr", "Ukrainian"), 
-            
-            new SubLang("vie", "Vietnamese")
+            new SubLang("hr", "hrv", "Croatian"),
+
+            new SubLang("sr", "srp", "Serbian"),
+
+            new SubLang("en", "eng", "English"),
+
+            new SubLang("es", "spa", "Spanish"),
+
+            new SubLang("fr", "fre", "French"),
+
+            new SubLang("el", "gre", "Greek"),
+
+            new SubLang("de", "ger", "German"),
+
+            new SubLang("ru", "rus", "Russian"),
+
+            new SubLang("zh", "chi", "Chinese"),
+
+            new SubLang("pt", "por", "Portuguese"),
+
+            new SubLang("nl", "dut", "Dutch"),
+
+            new SubLang("it", "ita", "Italian"),
+
+            new SubLang("ro", "rum", "Romanian"),
+
+            new SubLang("cs", "cze", "Czech"),
+
+            new SubLang("ar", "ara", "Arabic"),
+
+            new SubLang("pl", "pol", "Polish"),
+
+            new SubLang("tr", "tur", "Turkish"),
+
+            new SubLang("sv", "swe", "Swedish"),
+
+            new SubLang("fi", "fin", "Finnish"),
+
+            new SubLang("hu", "hun", "Hungarian"),
+
+            new SubLang("da", "dan", "Danish"),
+
+            new SubLang("he", "heb", "Hebrew"),
+
+            new SubLang("et", "est", "Estonian"),
+
+            new SubLang("sk", "slo", "Slovak"),
+
+            new SubLang("id", "ind", "Indonesian"),
+
+            new SubLang("fa", "per", "Persian"),
+
+            new SubLang("bg", "bul", "Bulgarian"),
+
+            new SubLang("ja", "jpn", "Japanese"),
+
+            new SubLang("sq", "alb", "Albanian"),
+
+            new SubLang("be", "bel", "Belarusian"),
+
+            new SubLang("hi", "hin", "Hindi"),
+
+            new SubLang("ga", "gle", "Irish"),
+
+            new SubLang("is", "ice", "Icelandic"),
+
+            new SubLang("ca", "cat", "Catalan"),
+
+            new SubLang("ko", "kor", "Korean"),
+
+            new SubLang("la", "lav", "Latvian"),
+
+            new SubLang("lt", "lit", "Lithuanian"),
+
+            new SubLang("mk", "mac", "Macedonian"),
+
+            new SubLang("no", "nor", "Norwegian"),
+
+            new SubLang("th", "tha", "Thai"),
+
+            new SubLang("uk", "ukr", "Ukrainian"),
+
+            new SubLang("vi", "vie", "Vietnamese")
         };
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SubtitleDownloader.Core
         {
             var code = FindLanguageCode(languageName);
 
-            return code ?? DefaultLanguage.Code;
+            return code ?? DefaultLanguage.ThreeCharCode;
         }
 
         /// <summary>
@@ -128,12 +128,12 @@ namespace SubtitleDownloader.Core
         /// Returns null if language code cannot be found with given language name</returns>
         public static string FindLanguageCode(string languageName)
         {
-            if (String.IsNullOrEmpty(languageName)) 
+            if (String.IsNullOrEmpty(languageName))
                 throw new ArgumentException("Language name cannot be null or empty!");
 
             var lang = languages.Where(l => l.Name.Equals(languageName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
-            return lang == null ? null : lang.Code;
+            return lang == null ? null : lang.ThreeCharCode;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace SubtitleDownloader.Core
         /// Returns English if language cannot be found with given language code</returns>
         public static string GetLanguageName(string languageCode)
         {
-            if (String.IsNullOrEmpty(languageCode)) 
+            if (String.IsNullOrEmpty(languageCode))
                 throw new ArgumentException("Language code cannot be null or empty!");
 
             if (languageCode.Count() != 3) throw new ArgumentException("Invalid ISO 639-2 language code!");
@@ -171,7 +171,7 @@ namespace SubtitleDownloader.Core
         /// <returns>True if language is supported, otherwise false</returns>
         public static bool IsSupportedLanguageName(string languageName)
         {
-            return languages.Any(lang => lang.Name.Equals(languageName, 
+            return languages.Any(lang => lang.Name.Equals(languageName,
                                                           StringComparison.OrdinalIgnoreCase));
         }
 
@@ -184,22 +184,44 @@ namespace SubtitleDownloader.Core
             return languages.Select(lang => lang.Name).ToList();
         }
 
+        public static string Convert2CharTo3Char(string twoChar)
+        {
+            if (String.IsNullOrEmpty(twoChar))
+                throw new ArgumentException("Languagecode cannot be null or empty!");
+
+            var lang = languages.Where(l => l.TwoCharCode.Equals(twoChar, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            return lang == null ? null : lang.ThreeCharCode;
+        }
+
+        public static string Convert3CharTo2Char(string threeChar)
+        {
+            if (String.IsNullOrEmpty(threeChar))
+                throw new ArgumentException("Languagecode cannot be null or empty!");
+
+            var lang = languages.Where(l => l.ThreeCharCode.Equals(threeChar, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            return lang == null ? null : lang.TwoCharCode;
+        }
+
         private static SubLang FindLanguageByLanguageCodeInternal(string languageCode)
         {
-            return languages.Where(l => l.Code.Equals(languageCode, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() ??
-                       aliases.Where(l => l.Code.Equals(languageCode, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            return languages.Where(l => l.ThreeCharCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() ??
+                       aliases.Where(l => l.ThreeCharCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
         }
     }
 
     internal class SubLang
     {
-        public string Code { get; private set; }
+        public string TwoCharCode { get; private set; }
+        public string ThreeCharCode { get; private set; }
 
         public string Name { get; private set; }
 
-        public SubLang(string code, string name)
+        public SubLang(string twoCharCode, string threeCharCode, string name)
         {
-            Code = code;
+            TwoCharCode = twoCharCode;
+            ThreeCharCode = threeCharCode;
             Name = name;
         }
     }
