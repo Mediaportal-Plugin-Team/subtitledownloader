@@ -13,7 +13,7 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>AlwaysOverwrite</UpdateOption>
-              <LocalFileName>..\SubtitleDownloader\bin\Release\net35\SubtitleDownloader.dll</LocalFileName>
+              <LocalFileName>..\SubtitleDownloader\bin\Release\net40\SubtitleDownloader.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{de214a23-2159-4bd3-9652-a354f38365b0}-SubtitleDownloader.dll</ZipFileName>
               <DestinationFilename>%Base%\SubtitleDownloader.dll</DestinationFilename>
             </FileItem>
@@ -265,7 +265,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>AlwaysOverwrite</UpdateOption>
-        <LocalFileName>..\SubtitleDownloader\bin\Release\net35\SubtitleDownloader.dll</LocalFileName>
+        <LocalFileName>..\SubtitleDownloader\bin\Release\net40\SubtitleDownloader.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{de214a23-2159-4bd3-9652-a354f38365b0}-SubtitleDownloader.dll</ZipFileName>
         <DestinationFilename>%Base%\SubtitleDownloader.dll</DestinationFilename>
       </FileItem>
