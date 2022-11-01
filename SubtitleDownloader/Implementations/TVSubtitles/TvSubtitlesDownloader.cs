@@ -24,10 +24,10 @@ namespace SubtitleDownloader.Implementations.TVSubtitles
         }
 
         private const string TvSubtitlesUrl = "http://www.tvsubtitles.net/";
-        
+
         private const string SeriesListingUrl = "http://www.tvsubtitles.net/tvshows.html";
 
-        [Obsolete("Not supported by current implementation")] 
+        [Obsolete("Not supported by current implementation")]
         public List<Subtitle> SearchSubtitles(SearchQuery query)
         {
             throw new NotSupportedException();
@@ -39,7 +39,7 @@ namespace SubtitleDownloader.Implementations.TVSubtitles
                 throw new ArgumentException("Serie title is required in query");
 
             string link = ParseSeriesLinkFromSeriesListingPage(query);
-            
+
             if (link == null)
                 return new List<Subtitle>();
 
@@ -51,7 +51,7 @@ namespace SubtitleDownloader.Implementations.TVSubtitles
             return ParseSubtitlesForEpisode(episodeLink, query);
         }
 
-        [Obsolete("Not supported by current implementation")] 
+        [Obsolete("Not supported by current implementation")]
         public List<Subtitle> SearchSubtitles(ImdbSearchQuery query)
         {
             throw new NotSupportedException();
@@ -191,7 +191,7 @@ namespace SubtitleDownloader.Implementations.TVSubtitles
                     string id = ParseSubtitleId(href);
 
                     var childDiv = subtitleLink.FirstChild;
-                    
+
                     string language = ParseSubtitleLanguageFromTitleAttribute(
                         childDiv.GetAttributeValue("title", string.Empty));
 
