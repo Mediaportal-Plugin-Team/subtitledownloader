@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using SubtitleDownloader.Core;
 using SubtitleDownloader.Util;
@@ -62,8 +64,27 @@ namespace SubtitleDownloader.Implementations.TVSubtitles
             string downloadUrl = TvSubtitlesUrl + "download-" + subtitle.Id + ".html";
             string zipFile = FileUtils.GetTempFileName();
 
-            WebClient client = new WebClient();
-            client.DownloadFile(downloadUrl, zipFile);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(downloadUrl);
+            if (SearchTimeout > 0)
+                request.Timeout = SearchTimeout * 1000;
+
+
+            var response = (HttpWebResponse)request.GetResponse();
+            var encoding = Encoding.GetEncoding(response.CharacterSet.Trim(new char[] { ' ', '"' }));
+            string result = null;
+            using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding, true))
+            {
+                result = reader.ReadToEnd().Trim();
+            }
+            var parts = Regex.Match(result, @"var\ss(?<nr>[^=]*)=\s'(?<value>[^']*)'");
+            string total = String.Empty;
+            while (parts.Success)
+            {
+                total = total + parts.Groups["value"].Value;
+                parts = parts.NextMatch();
+            }
+            using (WebClient client = new WebClient())
+                client.DownloadFile(TvSubtitlesUrl + total, zipFile);
 
             return FileUtils.ExtractFilesFromZipOrRarFile(zipFile);
         }
