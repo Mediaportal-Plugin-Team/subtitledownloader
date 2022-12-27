@@ -17,7 +17,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
         [DataMember]
         internal string movie_name;
         [DataMember]
-        internal int year;
+        internal int? year;
     }
     [DataContract]
     internal class OneFile
@@ -271,9 +271,9 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
                         if (queryYear != null)
                         {
                             // Check if the query year matches
-                            if (result.attributes.feature_details.year != 0)
+                            if (result.attributes.feature_details.year.HasValue && result.attributes.feature_details.year.Value != 0)
                             {
-                                if (queryYear.Equals(result.attributes.feature_details.year))
+                                if (queryYear.Equals(result.attributes.feature_details.year.Value))
                                 {
                                     searchResults.Add(subtitle);
                                 }
