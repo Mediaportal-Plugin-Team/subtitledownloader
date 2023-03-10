@@ -207,6 +207,8 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             if (!String.IsNullOrEmpty(url))
             {
                 string tempFile = Path.GetTempPath() + subtitle.FileName;
+                if (!tempFile.EndsWith(".srt", StringComparison.InvariantCultureIgnoreCase))
+                    tempFile += ".srt";
                 if (File.Exists(tempFile))
                 {
                     File.Delete(tempFile);

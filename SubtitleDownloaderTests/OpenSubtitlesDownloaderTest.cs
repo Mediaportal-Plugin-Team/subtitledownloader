@@ -72,6 +72,7 @@ namespace SubtitleDownloaderTests
             List<FileInfo> fileInfos = target.SaveSubtitle(subtitles[0]);
 
             Assert.IsTrue(fileInfos[0].Exists);
+            Assert.IsTrue(fileInfos[0].FullName.EndsWith(".srt", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>
