@@ -214,7 +214,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
     <Version>
       <Major>3</Major>
       <Minor>1</Minor>
-      <Build>2</Build>
+      <Build>3</Build>
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>Official subtitle sites/providers used by popular SubCentral plugin.
@@ -222,10 +222,10 @@ Click Next to continue or Cancel to exit Setup.</Value>
 
 
 To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.</ExtensionDescription>
-    <VersionDescription>- Opensubtitles: fix for attributes\feature_details\year sometimes being null</VersionDescription>
+    <VersionDescription>- Opensubtitles: Fixed missing file extension</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=24</OnlineLocation>
-    <ReleaseDate>2022-12-27T13:42:10.5741373+01:00</ReleaseDate>
+    <ReleaseDate>2023-03-10T14:56:37.2814622+01:00</ReleaseDate>
     <Tags>subtitles, subs, closed captions</Tags>
     <Location>.\[Name]-[Version].mpe1</Location>
     <Params>
