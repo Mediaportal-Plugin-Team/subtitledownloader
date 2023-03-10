@@ -10,7 +10,7 @@ using SubtitleDownloader.Util;
 
 namespace SubtitleDownloader.Implementations.OpenSubtitles
 {
-    #pragma warning disable 649
+#pragma warning disable 649
     [DataContract]
     internal class FeatureDetails
     {
@@ -90,7 +90,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
         [DataMember]
         internal string message;
     }
-    #pragma warning restore 649
+#pragma warning restore 649
 
     /// <summary>
     /// Implementation uses OpenSubtitles REST API
@@ -142,7 +142,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             queryString.Add("languages", GetLanguageCodes(query));
             queryString.Add("query", query.Query.ToLowerInvariant());
             if (query.Year.HasValue)
-              queryString.Add("year", query.Year.Value.ToString());
+                queryString.Add("year", query.Year.Value.ToString());
 
             var response = GetWebData(ApiUrl + "subtitles?" + queryString.ToString());
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
@@ -217,7 +217,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 if (SearchTimeout > 0)
                     request.Timeout = SearchTimeout * 1000;
-                var responseStream=request.GetResponse().GetResponseStream();
+                var responseStream = request.GetResponse().GetResponseStream();
                 using (var fStream = new FileStream(tempFile, FileMode.CreateNew))
                 {
                     responseStream.CopyTo(fStream);

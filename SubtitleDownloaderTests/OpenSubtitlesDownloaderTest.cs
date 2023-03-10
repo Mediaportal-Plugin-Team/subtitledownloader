@@ -7,8 +7,8 @@ using System.IO;
 
 namespace SubtitleDownloaderTests
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for OpenSubtitlesDownloaderTest and is intended
     ///to contain all OpenSubtitlesDownloaderTest Unit Tests
@@ -64,7 +64,7 @@ namespace SubtitleDownloaderTests
             OpenSubtitlesDownloader target = new OpenSubtitlesDownloader(configuration);
 
             EpisodeSearchQuery query = new EpisodeSearchQuery("Prison Break", 4, 21);
-            query.LanguageCodes = new string[] { "swe", "dut"};
+            query.LanguageCodes = new string[] { "swe", "dut" };
             List<Subtitle> subtitles = target.SearchSubtitles(query);
 
             Assert.IsTrue(subtitles.Count > 0);
@@ -82,7 +82,7 @@ namespace SubtitleDownloaderTests
         public void SearchQuerySearchSubtitlesTest()
         {
             OpenSubtitlesDownloader target = new OpenSubtitlesDownloader(configuration);
-            
+
             SearchQuery query = new SearchQuery("heroes");
             query.LanguageCodes = new string[] { "dut" };
             List<Subtitle> actual = target.SearchSubtitles(query);
@@ -116,9 +116,9 @@ namespace SubtitleDownloaderTests
 
             EpisodeSearchQuery query = new EpisodeSearchQuery("heroes", 1, 1);
             query.LanguageCodes = new string[] { "eng", "dut" };
-            
+
             List<Subtitle> actual = target.SearchSubtitles(query);
-            
+
             Assert.IsTrue(actual.Count > 0);
         }
 
@@ -148,9 +148,9 @@ namespace SubtitleDownloaderTests
 
             ImdbSearchQuery query = new ImdbSearchQuery("0375679");
             query.LanguageCodes = new string[] { "dut" };
-            
+
             List<Subtitle> actual = target.SearchSubtitles(query);
-            
+
             Assert.IsTrue(actual.Count > 0);
         }
     }
