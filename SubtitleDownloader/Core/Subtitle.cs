@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SubtitleDownloader.Core
 {
+    [DebuggerDisplay("ProgramName = {ProgramName}, FileName = {FileName}")]
     public class Subtitle
     {
         /// <summary>
