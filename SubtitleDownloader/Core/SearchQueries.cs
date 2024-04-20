@@ -77,6 +77,21 @@ namespace SubtitleDownloader.Core
         }
 
         /// <summary>
+        /// Creates a query for searching a subtitle for TV serie episode
+        /// </summary>
+        /// <param name="serieTitle">Title of the serie</param>
+        /// <param name="season">Season number</param>
+        /// <param name="episode">Episode number</param>
+        /// <param name="imdbId">IMDB (http://imdb.com) ID for the serie (may include "tt")</param>
+        public EpisodeSearchQuery(String serieTitle, int season, int episode, string imdbId = null)
+        {
+            SerieTitle = serieTitle;
+            Season = season;
+            Episode = episode;
+            ImdbId = imdbId;
+        }
+
+        /// <summary>
         /// Title for the serie, e.g. "Heroes"
         /// </summary>
         public string SerieTitle { get; private set; }
@@ -95,6 +110,11 @@ namespace SubtitleDownloader.Core
         /// TVDB (http://thetvdb.com) ID for the serie
         /// </summary>
         public int? TvdbId { get; private set; }
+
+        /// <summary>
+        /// IMDB (http://imdb.com) ID for the serie
+        /// </summary>
+        public string ImdbId { get; private set; }
 
     }
 
