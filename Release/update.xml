@@ -32,10 +32,10 @@
             <Type>MediaPortal</Type>
             <Id />
             <MinVersion>
-              <Major>1</Major>
-              <Minor>1</Minor>
-              <Build>6</Build>
-              <Revision>27644</Revision>
+              <Major>*</Major>
+              <Minor>*</Minor>
+              <Build>*</Build>
+              <Revision>*</Revision>
             </MinVersion>
             <MaxVersion>
               <Major>*</Major>
@@ -46,6 +46,7 @@
             <WarnOnly>false</WarnOnly>
             <Message>MediaPortal 1.2.0 or later is required</Message>
             <Name>MediaPortal</Name>
+            <Condition>None</Condition>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -75,6 +76,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=49</OnlineLocation>
         <ReleaseDate>2020-12-05T17:59:58.3469486+01:00</ReleaseDate>
         <Tags>subtitles, subs, closed captions</Tags>
+        <PlatformCompatibility>x86</PlatformCompatibility>
         <Location>.\[Name]-[Version].mpe1</Location>
         <Params>
           <Items>
@@ -142,10 +144,10 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <Type>MediaPortal</Type>
             <Id />
             <MinVersion>
-              <Major>1</Major>
-              <Minor>1</Minor>
-              <Build>6</Build>
-              <Revision>27644</Revision>
+              <Major>*</Major>
+              <Minor>*</Minor>
+              <Build>*</Build>
+              <Revision>*</Revision>
             </MinVersion>
             <MaxVersion>
               <Major>*</Major>
@@ -156,6 +158,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <WarnOnly>false</WarnOnly>
             <Message>MediaPortal 1.2.0 or later is required</Message>
             <Name>MediaPortal</Name>
+            <Condition>None</Condition>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -185,6 +188,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=50</OnlineLocation>
         <ReleaseDate>2022-10-28T16:48:32.6175353+02:00</ReleaseDate>
         <Tags>subtitles, subs, closed captions</Tags>
+        <PlatformCompatibility>x86</PlatformCompatibility>
         <Location>.\[Name]-[Version].mpe1</Location>
         <Params>
           <Items>
@@ -252,10 +256,10 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <Type>MediaPortal</Type>
             <Id />
             <MinVersion>
-              <Major>1</Major>
-              <Minor>1</Minor>
-              <Build>6</Build>
-              <Revision>27644</Revision>
+              <Major>*</Major>
+              <Minor>*</Minor>
+              <Build>*</Build>
+              <Revision>*</Revision>
             </MinVersion>
             <MaxVersion>
               <Major>*</Major>
@@ -266,6 +270,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <WarnOnly>false</WarnOnly>
             <Message>MediaPortal 1.2.0 or later is required</Message>
             <Name>MediaPortal</Name>
+            <Condition>None</Condition>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -296,6 +301,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=51</OnlineLocation>
         <ReleaseDate>2022-10-30T15:36:17.011024+01:00</ReleaseDate>
         <Tags>subtitles, subs, closed captions</Tags>
+        <PlatformCompatibility>x86</PlatformCompatibility>
         <Location>.\[Name]-[Version].mpe1</Location>
         <Params>
           <Items>
@@ -363,10 +369,10 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <Type>MediaPortal</Type>
             <Id />
             <MinVersion>
-              <Major>1</Major>
-              <Minor>1</Minor>
-              <Build>6</Build>
-              <Revision>27644</Revision>
+              <Major>*</Major>
+              <Minor>*</Minor>
+              <Build>*</Build>
+              <Revision>*</Revision>
             </MinVersion>
             <MaxVersion>
               <Major>*</Major>
@@ -377,6 +383,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <WarnOnly>false</WarnOnly>
             <Message>MediaPortal 1.2.0 or later is required</Message>
             <Name>MediaPortal</Name>
+            <Condition>None</Condition>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -406,6 +413,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=40</OnlineLocation>
         <ReleaseDate>2022-11-02T19:01:38.999525+01:00</ReleaseDate>
         <Tags>subtitles, subs, closed captions</Tags>
+        <PlatformCompatibility>x86</PlatformCompatibility>
         <Location>.\[Name]-[Version].mpe1</Location>
         <Params>
           <Items>
@@ -473,10 +481,10 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <Type>MediaPortal</Type>
             <Id />
             <MinVersion>
-              <Major>1</Major>
-              <Minor>1</Minor>
-              <Build>6</Build>
-              <Revision>27644</Revision>
+              <Major>*</Major>
+              <Minor>*</Minor>
+              <Build>*</Build>
+              <Revision>*</Revision>
             </MinVersion>
             <MaxVersion>
               <Major>*</Major>
@@ -487,6 +495,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <WarnOnly>false</WarnOnly>
             <Message>MediaPortal 1.2.0 or later is required</Message>
             <Name>MediaPortal</Name>
+            <Condition>None</Condition>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -516,6 +525,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=41</OnlineLocation>
         <ReleaseDate>2022-12-27T13:42:10.5741373+01:00</ReleaseDate>
         <Tags>subtitles, subs, closed captions</Tags>
+        <PlatformCompatibility>x86</PlatformCompatibility>
         <Location>.\[Name]-[Version].mpe1</Location>
         <Params>
           <Items>
@@ -583,10 +593,10 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
             <Type>MediaPortal</Type>
             <Id />
             <MinVersion>
-              <Major>1</Major>
-              <Minor>1</Minor>
-              <Build>6</Build>
-              <Revision>27644</Revision>
+              <Major>*</Major>
+              <Minor>*</Minor>
+              <Build>*</Build>
+              <Revision>*</Revision>
             </MinVersion>
             <MaxVersion>
               <Major>*</Major>
@@ -595,8 +605,9 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
               <Revision>*</Revision>
             </MaxVersion>
             <WarnOnly>false</WarnOnly>
-            <Message>MediaPortal 1.2.0 or later is required</Message>
+            <Message />
             <Name>MediaPortal</Name>
+            <Condition>None</Condition>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -626,6 +637,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=24</OnlineLocation>
         <ReleaseDate>2023-03-10T14:56:37.2814622+01:00</ReleaseDate>
         <Tags>subtitles, subs, closed captions</Tags>
+        <PlatformCompatibility>AnyCPU</PlatformCompatibility>
         <Location>.\[Name]-[Version].mpe1</Location>
         <Params>
           <Items>

@@ -10,7 +10,7 @@
         <Description>Dll files required to run the plugin.</Description>
         <Files>
           <Items>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true" Condition="None">
               <Param1 />
               <UpdateOption>AlwaysOverwrite</UpdateOption>
               <LocalFileName>..\SubtitleDownloader\bin\Release\net40\SubtitleDownloader.dll</LocalFileName>
@@ -27,7 +27,7 @@
         <Description>Template for account info for OpenSubtitles</Description>
         <Files>
           <Items>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true" Condition="None">
               <Param1 />
               <UpdateOption>NeverOverwrite</UpdateOption>
               <LocalFileName>..\SubtitleDownloader\Implementations\OpenSubtitles\OpenSubtitlesConfiguration.xml</LocalFileName>
@@ -41,7 +41,7 @@
   </Groups>
   <Sections>
     <Items>
-      <SectionItem Guid="379a8ba4-ad67-450f-b2a9-64e94f68711d" Name="Welcome Screen" ConditionGroup="">
+      <SectionItem Guid="379a8ba4-ad67-450f-b2a9-64e94f68711d" Name="Welcome Screen" ConditionGroup="" Condition="None">
         <Params>
           <Items>
             <SectionParam Name="Header text">
@@ -75,7 +75,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <PanelName>Welcome Screen</PanelName>
         <WizardButtonsEnum>NextCancel</WizardButtonsEnum>
       </SectionItem>
-      <SectionItem Guid="9b06c900-17bb-463e-9613-2dadbac2e735" Name="Tree View Selector" ConditionGroup="">
+      <SectionItem Guid="9b06c900-17bb-463e-9613-2dadbac2e735" Name="Tree View Selector" ConditionGroup="" Condition="None">
         <Params>
           <Items>
             <SectionParam Name="Header Title">
@@ -110,7 +110,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <PanelName>Tree View Selector</PanelName>
         <WizardButtonsEnum>BackNextCancel</WizardButtonsEnum>
       </SectionItem>
-      <SectionItem Guid="b06cee33-10ee-4b79-b50e-6ee3618f493b" Name="Install Section" ConditionGroup="">
+      <SectionItem Guid="b06cee33-10ee-4b79-b50e-6ee3618f493b" Name="Install Section" ConditionGroup="" Condition="None">
         <Params>
           <Items>
             <SectionParam Name="Header Title">
@@ -132,7 +132,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         </Params>
         <Actions>
           <Items>
-            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="">
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="" Condition="None">
               <Params>
                 <Items />
               </Params>
@@ -144,7 +144,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <PanelName>Install Section</PanelName>
         <WizardButtonsEnum>Next</WizardButtonsEnum>
       </SectionItem>
-      <SectionItem Guid="d0e4fd42-d186-4782-9824-9dd8abbe11af" Name="Setup Complete" ConditionGroup="">
+      <SectionItem Guid="d0e4fd42-d186-4782-9824-9dd8abbe11af" Name="Setup Complete" ConditionGroup="" Condition="None">
         <Params>
           <Items>
             <SectionParam Name="Header text">
@@ -184,10 +184,10 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <Type>MediaPortal</Type>
         <Id />
         <MinVersion>
-          <Major>1</Major>
-          <Minor>1</Minor>
-          <Build>6</Build>
-          <Revision>27644</Revision>
+          <Major>*</Major>
+          <Minor>*</Minor>
+          <Build>*</Build>
+          <Revision>*</Revision>
         </MinVersion>
         <MaxVersion>
           <Major>*</Major>
@@ -196,8 +196,9 @@ Click Next to continue or Cancel to exit Setup.</Value>
           <Revision>*</Revision>
         </MaxVersion>
         <WarnOnly>false</WarnOnly>
-        <Message>MediaPortal 1.2.0 or later is required</Message>
+        <Message />
         <Name>MediaPortal</Name>
+        <Condition>None</Condition>
       </DependencyItem>
     </Items>
   </Dependencies>
@@ -227,6 +228,7 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=221&amp;cf_id=24</OnlineLocation>
     <ReleaseDate>2023-03-10T14:56:37.2814622+01:00</ReleaseDate>
     <Tags>subtitles, subs, closed captions</Tags>
+    <PlatformCompatibility>AnyCPU</PlatformCompatibility>
     <Location>.\[Name]-[Version].mpe1</Location>
     <Params>
       <Items>
@@ -262,14 +264,14 @@ To use SubtitleDownloader with MediaPortal, you must install SubCentral plugin.<
   </GeneralInfo>
   <UniqueFileList>
     <Items>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true" Condition="None">
         <Param1 />
         <UpdateOption>AlwaysOverwrite</UpdateOption>
         <LocalFileName>..\SubtitleDownloader\bin\Release\net40\SubtitleDownloader.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{de214a23-2159-4bd3-9652-a354f38365b0}-SubtitleDownloader.dll</ZipFileName>
         <DestinationFilename>%Base%\SubtitleDownloader.dll</DestinationFilename>
       </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true" Condition="None">
         <Param1 />
         <UpdateOption>NeverOverwrite</UpdateOption>
         <LocalFileName>..\SubtitleDownloader\Implementations\OpenSubtitles\OpenSubtitlesConfiguration.xml</LocalFileName>
