@@ -41,7 +41,6 @@
     <Compile Include="Implementations\OpenSubtitles\OpenSubtitlesConfiguration.cs" />
     <Compile Include="Implementations\OpenSubtitles\OpenSubtitlesDownloader.cs" />
     <Compile Include="Implementations\Podnapisi\PodnapisiDownloader.cs" />
-    <Compile Include="Implementations\Subscene\SubsceneDownloader.cs" />
     <Compile Include="Implementations\SubtitleSource\SubtitleSourceDownloader.cs" />
     <Compile Include="Implementations\TVSubtitles\TvSubtitlesDownloader.cs" />
     <Compile Include="Util\Decoder.cs" />
