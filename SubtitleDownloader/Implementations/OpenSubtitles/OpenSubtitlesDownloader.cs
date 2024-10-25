@@ -148,7 +148,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
             SubtitleSearchResponse sr = (SubtitleSearchResponse)ser.ReadObject(response);
 
-            return CreateSubtitleResults(sr, query.Year);
+            return CreateSubtitleResults(sr, query.Year, query.Query.ToLowerInvariant());
         }
 
         public List<Subtitle> SearchSubtitles(EpisodeSearchQuery query)
@@ -173,7 +173,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
             SubtitleSearchResponse sr = (SubtitleSearchResponse)ser.ReadObject(response);
 
-            return CreateSubtitleResults(sr, null);
+            return CreateSubtitleResults(sr, null, query.SerieTitle.ToLowerInvariant());
         }
 
         public List<Subtitle> SearchSubtitles(ImdbSearchQuery query)
@@ -188,7 +188,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
             SubtitleSearchResponse sr = (SubtitleSearchResponse)ser.ReadObject(response);
 
-            return CreateSubtitleResults(sr, null);
+            return CreateSubtitleResults(sr, null, null);
         }
 
         public List<FileInfo> SaveSubtitle(Subtitle subtitle)
@@ -265,9 +265,11 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             return request.GetResponse().GetResponseStream();
         }
 
-        private List<Subtitle> CreateSubtitleResults(SubtitleSearchResponse subResults, int? queryYear)
+        private List<Subtitle> CreateSubtitleResults(SubtitleSearchResponse subResults, int? queryYear, string title)
         {
-            List<Subtitle> searchResults = new List<Subtitle>();
+            List<Subtitle> searchResultsExact = new List<Subtitle>();
+            List<Subtitle> searchResultsFuzzy = new List<Subtitle>();
+            List<Subtitle> searchResults;
 
             if (subResults != null && subResults.subtitles != null && subResults.subtitles.Length > 0)
             {
@@ -276,6 +278,10 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
                     {
                         Subtitle subtitle = new Subtitle(result.attributes.files[0].file_id, result.attributes.feature_details.movie_name,
                                                          result.attributes.files[0].file_name, Languages.Convert2CharTo3Char(result.attributes.language));
+                        if (!String.IsNullOrEmpty(title) && result.attributes.feature_details.movie_name.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0)
+                            searchResults = searchResultsExact;
+                        else
+                            searchResults = searchResultsFuzzy;
 
                         if (queryYear != null)
                         {
@@ -299,7 +305,8 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
                         }
                     }
             }
-            return searchResults;
+            searchResultsExact.AddRange(searchResultsFuzzy);
+            return searchResultsExact;
         }
 
         private void CreateConnectionAndLogin()
