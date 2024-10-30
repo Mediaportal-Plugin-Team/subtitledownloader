@@ -278,7 +278,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
                     {
                         Subtitle subtitle = new Subtitle(result.attributes.files[0].file_id, result.attributes.feature_details.movie_name,
                                                          result.attributes.files[0].file_name, Languages.Convert2CharTo3Char(result.attributes.language));
-                        if (!String.IsNullOrEmpty(title) && result.attributes.feature_details.movie_name.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0)
+                        if (!String.IsNullOrEmpty(title) && result.attributes.feature_details.movie_name.StartsWith(title, StringComparison.OrdinalIgnoreCase))
                             searchResults = searchResultsExact;
                         else
                             searchResults = searchResultsFuzzy;
