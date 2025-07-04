@@ -160,6 +160,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             queryString.Add("languages", GetLanguageCodes(query));
             queryString.Add("query", query.SerieTitle.ToLowerInvariant());
             queryString.Add("season_number", query.Season.ToString());
+            queryString.Add("type", "episode");
             if (!String.IsNullOrEmpty(query.ImdbId))
             {
                 if (query.ImdbId.StartsWith("tt"))
