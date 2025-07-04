@@ -7,7 +7,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>3.1.5</Version>
+    <Version>3.2.0</Version>
     <Authors>seco,doskabouter</Authors>
     <Description>SubtitleDownloader is a C# API library for downloading subtitles from various multi-language subtitle sites. It was originally developed to be used with MediaPortal plugins but it can be also used in any .NET project.</Description>
     <PackageProjectUrl>https://github.com/doskabouter/subtitledownloader</PackageProjectUrl>
