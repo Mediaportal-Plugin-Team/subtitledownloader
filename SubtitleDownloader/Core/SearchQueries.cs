@@ -202,5 +202,14 @@ namespace SubtitleDownloader.Core
 
             return languageCodes.Any(code => code.Equals(languageCode.ToLower()));
         }
+
+        public string Get2CharLanguageCodes()
+        {
+            string[] twoCharLanguages = new string[LanguageCodes.Length];
+            for (int i = 0; i < LanguageCodes.Length; i++)
+                twoCharLanguages[i] = Languages.Convert3CharTo2Char(LanguageCodes[i]);
+            return string.Join(",", twoCharLanguages);
+        }
+
     }
 }

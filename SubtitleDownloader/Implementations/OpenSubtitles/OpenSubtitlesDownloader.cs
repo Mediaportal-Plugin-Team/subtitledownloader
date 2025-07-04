@@ -139,7 +139,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
             CreateConnectionAndLogin();
 
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
-            queryString.Add("languages", GetLanguageCodes(query));
+            queryString.Add("languages", query.Get2CharLanguageCodes());
             queryString.Add("query", query.Query.ToLowerInvariant());
             if (query.Year.HasValue)
                 queryString.Add("year", query.Year.Value.ToString());
@@ -157,7 +157,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
 
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("episode_number", query.Episode.ToString());
-            queryString.Add("languages", GetLanguageCodes(query));
+            queryString.Add("languages", query.Get2CharLanguageCodes());
             queryString.Add("query", query.SerieTitle.ToLowerInvariant());
             queryString.Add("season_number", query.Season.ToString());
             queryString.Add("type", "episode");
@@ -183,7 +183,7 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
 
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("imdb_id", query.ImdbId.ToLowerInvariant());
-            queryString.Add("languages", GetLanguageCodes(query));
+            queryString.Add("languages", query.Get2CharLanguageCodes());
 
             var response = GetWebData(ApiUrl + "subtitles?" + queryString.ToString());
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SubtitleSearchResponse));
@@ -324,14 +324,6 @@ namespace SubtitleDownloader.Implementations.OpenSubtitles
                     token = loginResult.token;
                 }
             }
-        }
-
-        private string GetLanguageCodes(SubtitleSearchQuery query)
-        {
-            string[] twoCharLanguages = new string[query.LanguageCodes.Length];
-            for (int i = 0; i < query.LanguageCodes.Length; i++)
-                twoCharLanguages[i] = Languages.Convert3CharTo2Char(query.LanguageCodes[i]);
-            return string.Join(",", twoCharLanguages);
         }
     }
 
