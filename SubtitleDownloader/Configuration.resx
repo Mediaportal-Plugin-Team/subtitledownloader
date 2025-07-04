@@ -125,4 +125,8 @@
     <value>FIXME</value>
     <comment>User agent identifier string for OpenSubtitles API</comment>
   </data>
+  <data name="SubdlApiKey" xml:space="preserve">
+    <value>FIXME</value>
+    <comment>Api key for Subdl API</comment>
+  </data>
 </root>
